@@ -155,10 +155,6 @@ class SpotifyWrapper:
             track_info = {
                 'track_id': track['track']['id'],
                 'name': track['track']['name'],
-                'artist': track['track']['artists'][0]['name'],
-                'artist_id': track['track']['artists'][0]['id'],
-                'played_at': track.get('played_at', None),
-                'popularity': details['popularity'],
                 'song_array': song_array,
                 'genres': genres
             }
@@ -175,14 +171,6 @@ class SpotifyWrapper:
                 'pitch_network_mean_clustering_coeff': pitch_stats['average_clustering'],
                 'timbre_00': average_timbre[0],
                 'timbre_01': average_timbre[1],
-                'timbre_02': average_timbre[2],
-                'timbre_03': average_timbre[3],
-                'timbre_04': average_timbre[4],
-                'timbre_05': average_timbre[5],
-                'timbre_06': average_timbre[6],
-                'timbre_07': average_timbre[7],
-                'timbre_08': average_timbre[8],
-                'timbre_09': average_timbre[9],
                 'timbre_10': average_timbre[10],
                 'timbre_11': average_timbre[11],
                 'pitch_network': pitch_stats['pitch_network'],
@@ -210,24 +198,6 @@ class SpotifyWrapper:
             df_recs = df_songs
         print(f'Reccomended songs df backend = {df_recs.head()}')
 
-        df_songs["tempo_normalized"] = df_songs["tempo"] / df_songs["tempo"].max()
-        df_songs["popularity_normalized"] = df_songs["popularity"] / 100
-
-        df_recs["tempo_normalized"] = df_recs["tempo"] / df_recs["tempo"].max()
-        df_recs["popularity_normalized"] = df_recs["popularity"] / 100
-
-        features = ["tempo_normalized", "popularity_normalized", "energy", "danceability","key"]
-
-        fig = px.scatter_matrix(
-            df_songs,
-            dimensions=features,
-            color="key",
-            hover_name="name",
-            template="plotly_dark",
-            labels={"tempo_normalized": "Tempo",
-                  "popularity_normalized": "Popularity Width", "energy": "Energy",
-                  "danceability": "Danceability", "key": "Key", }
-        )
         div = opy.plot(fig, auto_open=False, output_type='div')
 
         fig = px.parallel_coordinates(df_songs[features], 
